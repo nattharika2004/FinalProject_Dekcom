@@ -1,0 +1,73 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background: url('/images/background.png') no-repeat center center fixed;
+        background-size: cover;
+        color: white; /* เปลี่ยนสีฟอนต์เริ่มต้นใน body เป็นสีขาว */
+    }
+
+    .form-control {
+        color: black; /* หากต้องการให้ input เป็นสีดำเพื่อความชัดเจน */
+    }
+
+    label {
+        color: white; /* เปลี่ยนสีฟอนต์ของ label เป็นสีขาว */
+    }
+
+    h3 {
+        color: white; /* เปลี่ยนสีหัวข้อเป็นสีขาว */
+    }
+
+    .text-danger {
+        color: red; /* ข้อความแจ้งเตือนยังคงเป็นสีแดง */
+    }
+
+    button {
+        color: white; /* ปรับสีฟอนต์ของปุ่มให้เป็นสีขาว */
+    }
+
+    input:focus {
+        outline: none;
+        border: 2px solid red; /* เพิ่มขอบแดงเมื่อโฟกัส */
+        box-shadow: 0 0 5px red; /* เพิ่มเงาแดง */
+    }
+</style>
+
+<div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+    <div style="width: 100%; max-width: 500px; padding: 20px; border-radius: 10px; background: rgba(0, 0, 0, 0.85); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);">
+        <div style="text-align: center; margin-bottom: 20px;">
+            <img src="/images/Login.png" alt="Logo" style="width: 100px; margin-bottom: 10px; border-radius: 50%;">
+            <h3 style="margin: 0;">Log in</h3>
+        </div>
+
+        <form id="account" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            <div style="margin-bottom: 15px;">
+                <label for="Input_UserName" style="display: block; font-weight: bold;">Username</label>
+                <input asp-for="Input.UserName" class="form-control" style="width: 100%; padding: 10px; margin-top: 5px;" autocomplete="username" aria-required="true" />
+                <span asp-validation-for="Input.UserName" class="text-danger"></span>
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label for="Input_Password" style="display: block; font-weight: bold;">Password</label>
+                <input asp-for="Input.Password" type="password" class="form-control" style="width: 100%; padding: 10px; margin-top: 5px;" autocomplete="current-password" aria-required="true" />
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            <div style="text-align: center;">
+                <button id="login-submit" type="submit" class="btn btn-primary" style="width: 100%; padding: 10px;">Log in</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

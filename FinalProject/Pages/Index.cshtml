@@ -1,0 +1,96 @@
+﻿@page
+@model FinalProject.Pages.IndexModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<style>
+    body {
+        background-color: black;
+        color: white;
+    }
+
+    .table {
+        color: white;
+    }
+
+    a {
+        color: #00f; /* สีฟ้า หรือปรับเปลี่ยนตามต้องการ */
+    }
+
+        a:hover {
+            color: red; /* สีแดงเมื่อชี้เมาส์ */
+        }
+
+    .btn {
+        color: white;
+    }
+
+    .btn-danger {
+        background-color: #d9534f;
+    }
+
+    .btn-primary {
+        background-color: #0275d8;
+    }
+
+    .alert {
+        background-color: #444;
+        border-color: #444;
+        color: white;
+    }
+</style>
+
+<center>
+    <img src="images/logo.png" width="400" alt="Logo" />
+</center>
+
+@if (Model.listEmails == null || !Model.listEmails.Any())
+{
+    <div class="alert alert-info mt-4">No emails to display.</div>
+}
+else
+{
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th>From</th>
+                <th>Subject</th>
+                <th>Date/Time</th>
+                <th>Delete</th>
+                <th>Action</th> <!-- Column for Reply button -->
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var email in Model.listEmails)
+            {
+                <tr>
+                    <td>@email.EmailSender</td>
+                    <td>
+                        @if (email.EmailIsRead == "0")
+                        {
+                            <img src="images/yellow.gif" alt="Unread" height="10px" /> <!-- รูปภาพสีเหลืองเมื่อไม่อ่าน -->
+                        }
+                        else
+                        {
+                            <img src="images/gray.png" alt="Read" height="10px" /> <!-- รูปภาพสีเทาเมื่ออ่านแล้ว -->
+                        }
+                        <a href="/ReadEmail?emailid=@email.EmailID">@email.EmailSubject</a>
+                    </td>
+                    <td>@email.EmailDate</td>
+                    <td>
+                        <a class="btn btn-danger btn-sm" href="/DeleteEmail?emailid=@email.EmailID">Delete</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" href="/ReadEmail?emailid=@email.EmailID">Reply</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+<a class="btn btn-primary btn-sm mt-4" href="/ComposeMail?Sender=@User.Identity.Name">Compose New Email</a>

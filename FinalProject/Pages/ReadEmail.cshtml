@@ -1,0 +1,25 @@
+﻿@page
+@model FinalProject.Pages.ReadEmailModel
+
+@{
+    ViewData["Title"] = "Read Email";
+}
+
+<h2>@Model.EmailSubject</h2>
+<p><strong>From:</strong> @Model.EmailSender</p>
+<p><strong>Date:</strong> @Model.EmailDate</p>
+<p><strong>Message:</strong></p>
+<p>@Model.EmailMessage</p>
+
+<hr />
+
+<h3>Reply</h3>
+<form method="post">
+    <div class="form-group">
+        <label for="ReplyMessage">Your Reply</label>
+        <textarea id="ReplyMessage" name="ReplyMessage" class="form-control" rows="5" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Send Reply</button>
+</form>
+
+<a href="/Index" class="btn btn-primary mt-3">Back to Inbox</a>
