@@ -1,20 +1,14 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-#nullable disable
-
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using FinalProject.Areas.Identity.Data;
+using FinalProject.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace FinalProject.Areas.Identity.Pages.Account
 {
@@ -53,6 +47,7 @@ namespace FinalProject.Areas.Identity.Pages.Account
             public bool RememberMe { get; set; }
         }
 
+   
         public async Task OnGetAsync(string returnUrl = null)
         {
             if (!string.IsNullOrEmpty(ErrorMessage))
@@ -60,7 +55,7 @@ namespace FinalProject.Areas.Identity.Pages.Account
                 ModelState.AddModelError(string.Empty, ErrorMessage);
             }
 
-            returnUrl ??= Url.Content("~/");
+            returnUrl ??= Url.Content("~/");  
 
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
@@ -69,9 +64,10 @@ namespace FinalProject.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
         }
 
+     
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/");
+            returnUrl ??= Url.Content("~/");  
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
@@ -82,8 +78,8 @@ namespace FinalProject.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User logged in.");
 
-                    // Redirect to the homepage (Index) after successful login
-                    return RedirectToPage("/Index"); // This is the redirect to the Index page after login
+                    
+                    return RedirectToLocal(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
                 {
@@ -102,6 +98,19 @@ namespace FinalProject.Areas.Identity.Pages.Account
             }
 
             return Page();
+        }
+
+   
+        private IActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);  
+            }
+            else
+            {
+                return RedirectToPage("/Index"); 
+            }
         }
     }
 }

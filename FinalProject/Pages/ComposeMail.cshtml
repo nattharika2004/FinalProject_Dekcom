@@ -4,20 +4,57 @@
     ViewData["Title"] = "Compose Email";
 }
 
-<h2>Compose Email</h2>
+<!-- เพิ่มพื้นหลังสีดำ และกำหนดสีตัวอักษร -->
+<div class="container" style="background-color: #333; color: white; padding: 20px; border-radius: 10px; max-width: 600px; margin-top: 50px;">
+    <h2 style="text-align: center; color: #f8f9fa;">Compose Email</h2>
 
-<form method="post">
-    <div class="form-group">
-        <label for="Receiver">Recipient</label>
-        <input type="text" class="form-control" id="Receiver" name="Receiver" required />
-    </div>
-    <div class="form-group">
-        <label for="Subject">Subject</label>
-        <input type="text" class="form-control" id="Subject" name="Subject" required />
-    </div>
-    <div class="form-group">
-        <label for="Message">Message</label>
-        <textarea class="form-control" id="Message" name="Message" rows="4" required></textarea>
-    </div>
-    <button type="submit" class="btn btn-primary">Send</button>
-</form>
+    <form method="post">
+        <div class="form-group">
+            <label for="Receiver">Recipient</label>
+            <input type="text" class="form-control" id="Receiver" name="Receiver" required />
+        </div>
+        <div class="form-group">
+            <label for="Subject">Subject</label>
+            <input type="text" class="form-control" id="Subject" name="Subject" required />
+        </div>
+        <div class="form-group">
+            <label for="Message">Message</label>
+            <textarea class="form-control" id="Message" name="Message" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px; background-color: #007bff; border-color: #007bff; color: white;">Send</button>
+    </form>
+
+    <!-- เพิ่มปุ่ม Manage Users เฉพาะผู้ใช้ที่มีบทบาทเป็น Admin -->
+    @if (User.IsInRole("Admin"))
+    {
+        <div style="margin-top: 20px;">
+            <a href="@Url.Page("/Admin/ManageUsers")" class="btn btn-info" style="width: 100%; background-color: #17a2b8; color: white;">
+                Manage Users
+            </a>
+        </div>
+    }
+</div>
+
+<!-- ตกแต่งสีพื้นหลังและปุ่ม -->
+<style>
+    body {
+        background-color: #212529; /* พื้นหลังสีดำ */
+        color: white; /* ตัวอักษรสีขาว */
+        font-family: Arial, sans-serif;
+    }
+
+    label {
+        color: #f8f9fa; /* ทำให้สีตัวอักษรใน label เป็นสีอ่อน */
+    }
+
+    input, textarea {
+        background-color: #444; /* พื้นหลังของ input เป็นสีเทาเข้ม */
+        border: 1px solid #555; /* ขอบสีเทาอ่อน */
+        color: white; /* ตัวอักษรใน input เป็นสีขาว */
+    }
+
+        input:focus, textarea:focus {
+            background-color: #555; /* เมื่อ focus สีพื้นหลังจะเข้มขึ้น */
+            border-color: #007bff; /* ขอบเมื่อ focus จะเป็นสีน้ำเงิน */
+        }
+</style>

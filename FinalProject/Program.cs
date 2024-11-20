@@ -5,23 +5,27 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// ????? Connection String ?????????? DbContext
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<FinalProjectContext>(options =>
     options.UseSqlServer(connectionString));
+
+// ??????? Identity ????? Role Manager
+builder.Services.AddDefaultIdentity<FinalProjectUser>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false; // ??????????????????
+    options.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider; // ?????? 2FA
+})
+.AddRoles<IdentityRole>() // ?????????? Role Management
+.AddEntityFrameworkStores<FinalProjectContext>()
+.AddDefaultTokenProviders();
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-builder.Services.AddDefaultIdentity<FinalProjectUser>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddEntityFrameworkStores<FinalProjectContext>();
 builder.Services.AddRazorPages();
-
-
-builder.Services.AddRazorPages();
-
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// ????? Pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -29,18 +33,36 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapRazorPages();
 
+// ????? Roles ?????????????????
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    await CreateRolesAsync(roleManager);
+}
+
 app.Run();
+
+// ??????????????????? Roles
+async Task CreateRolesAsync(RoleManager<IdentityRole> roleManager)
+{
+    string[] roleNames = { "Admin", "Manager", "User" };
+
+    foreach (var roleName in roleNames)
+    {
+        if (!await roleManager.RoleExistsAsync(roleName))
+        {
+            await roleManager.CreateAsync(new IdentityRole(roleName));
+        }
+    }
+}

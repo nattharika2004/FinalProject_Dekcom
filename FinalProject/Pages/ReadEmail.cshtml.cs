@@ -22,21 +22,21 @@ namespace FinalProject.Pages
         {
             try
             {
-                string connectionString = "Server=tcp:dekcom.database.windows.net,1433;Initial Catalog=Dekcom2004;Persist Security Info=False;User ID=ABMN;Password=Dekcom12345;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+                string connectionString = "Server=tcp:dekcom1234.database.windows.net,1433;Initial Catalog=Dekcom;Persist Security Info=False;User ID=dekcom;Password=ABMN_1234;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
 
-                    // ?????????????????????????????
+                    
                     string updateSql = "UPDATE emails SET EmailIsRead = 1 WHERE ID = @EmailID";
                     using (SqlCommand updateCommand = new SqlCommand(updateSql, connection))
                     {
                         updateCommand.Parameters.AddWithValue("@EmailID", emailid);
-                        updateCommand.ExecuteNonQuery();  // ??????????????????
+                        updateCommand.ExecuteNonQuery();  
                     }
 
-                    // ??????????????
+                    
                     string sql = "SELECT * FROM emails WHERE ID = @EmailID";
                     using (SqlCommand command = new SqlCommand(sql, connection))
                     {

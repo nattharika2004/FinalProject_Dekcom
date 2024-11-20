@@ -19,7 +19,7 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
                 <!-- Navbar Brand (FinalProject Link) -->
-                <a class="navbar-brand" asp-area="" asp-page="/Index">FinalProject</a>
+                <a class="navbar-brand" asp-area="" asp-page="/Login">FinalProject</a>
 
                 <!-- Navbar Toggle for Mobile -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
@@ -53,5 +53,12 @@
 
     <!-- Section for additional scripts (if needed) -->
     @await RenderSectionAsync("Scripts", required: false)
+
+    <!-- Only show "Manage Users" link if the user is an Admin -->
+    @if (User.IsInRole("Admin"))
+    {
+        <a href="@Url.Page("/Admin/ManageUsers")" class="btn btn-info">Manage Users</a>
+    }
 </body>
 </html>
+

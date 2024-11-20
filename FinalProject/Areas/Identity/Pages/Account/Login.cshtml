@@ -10,63 +10,118 @@
         height: 100%;
         margin: 0;
         padding: 0;
+        overflow: hidden;
         background: url('/images/background.png') no-repeat center center fixed;
         background-size: cover;
-        color: white; /* เปลี่ยนสีฟอนต์เริ่มต้นใน body เป็นสีขาว */
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: white;
     }
 
     .form-control {
-        color: black; /* หากต้องการให้ input เป็นสีดำเพื่อความชัดเจน */
+        color: black;
+        border-radius: 8px;
+        font-size: 1rem;
+        padding: 10px;
     }
 
     label {
-        color: white; /* เปลี่ยนสีฟอนต์ของ label เป็นสีขาว */
+        color: white;
+        font-weight: bold;
+        font-size: 1.1rem;
     }
 
     h3 {
-        color: white; /* เปลี่ยนสีหัวข้อเป็นสีขาว */
+        color: #f8f9fa;
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 20px;
     }
 
     .text-danger {
-        color: red; /* ข้อความแจ้งเตือนยังคงเป็นสีแดง */
-    }
-
-    button {
-        color: white; /* ปรับสีฟอนต์ของปุ่มให้เป็นสีขาว */
+        color: #ff6b6b;
+        font-size: 0.9rem;
     }
 
     input:focus {
         outline: none;
-        border: 2px solid red; /* เพิ่มขอบแดงเมื่อโฟกัส */
-        box-shadow: 0 0 5px red; /* เพิ่มเงาแดง */
+        border: 2px solid #17a2b8;
+        box-shadow: 0 0 10px #17a2b8;
+    }
+
+    button {
+        color: white;
+        font-size: 1rem;
+        font-weight: bold;
+        border-radius: 8px;
+        background-color: #007bff;
+        border: none;
+        transition: background-color 0.3s, box-shadow 0.3s;
+        padding: 12px;
+    }
+
+        button:hover {
+            background-color: #0056b3;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+    #account-container {
+        width: 100%;
+        max-width: 500px;
+        padding: 30px;
+        border-radius: 12px;
+        background: rgba(0, 0, 0, 0.85);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .logo-container img {
+        border-radius: 50%;
+        box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+    }
+
+    .center-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
     }
 </style>
 
-<div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
-    <div style="width: 100%; max-width: 500px; padding: 20px; border-radius: 10px; background: rgba(0, 0, 0, 0.85); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);">
-        <div style="text-align: center; margin-bottom: 20px;">
-            <img src="/images/Login.png" alt="Logo" style="width: 100px; margin-bottom: 10px; border-radius: 50%;">
-            <h3 style="margin: 0;">Log in</h3>
+<div class="center-container">
+    <div id="account-container">
+        <div class="logo-container text-center">
+            <img src="/images/Login.png" alt="Logo" style="width: 120px; margin-bottom: 15px;">
+            <h3>Log in</h3>
         </div>
 
         <form id="account" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-            <div style="margin-bottom: 15px;">
-                <label for="Input_UserName" style="display: block; font-weight: bold;">Username</label>
-                <input asp-for="Input.UserName" class="form-control" style="width: 100%; padding: 10px; margin-top: 5px;" autocomplete="username" aria-required="true" />
+            <div class="mb-3">
+                <label for="Input_UserName">Username</label>
+                <input asp-for="Input.UserName" class="form-control" autocomplete="username" />
                 <span asp-validation-for="Input.UserName" class="text-danger"></span>
             </div>
-            <div style="margin-bottom: 20px;">
-                <label for="Input_Password" style="display: block; font-weight: bold;">Password</label>
-                <input asp-for="Input.Password" type="password" class="form-control" style="width: 100%; padding: 10px; margin-top: 5px;" autocomplete="current-password" aria-required="true" />
+            <div class="mb-4">
+                <label for="Input_Password">Password</label>
+                <input asp-for="Input.Password" type="password" class="form-control" autocomplete="current-password" />
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
             <div style="text-align: center;">
-                <button id="login-submit" type="submit" class="btn btn-primary" style="width: 100%; padding: 10px;">Log in</button>
+                <button id="login-submit" type="submit" class="btn btn-primary" style="width: 100%;">Log in</button>
             </div>
+
+            <!-- Hidden returnUrl field -->
+            <input type="hidden" name="returnUrl" value="@Request.Query["returnUrl"]" />
         </form>
     </div>
 </div>
+
+@* Only show "Manage Users" link for Admin users *@
+@if (User.IsInRole("Admin"))
+{
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Page("/Admin/ManageUsers")">Manage Users</a>
+    </li>
+}
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

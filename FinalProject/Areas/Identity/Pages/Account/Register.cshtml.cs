@@ -1,7 +1,3 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -49,7 +45,7 @@ namespace FinalProject.Areas.Identity.Pages.Account
         [BindProperty]
         public InputModel Input { get; set; }
 
-        public String ReturnUrl { get; set; }
+        public string ReturnUrl { get; set; }
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
@@ -69,6 +65,7 @@ namespace FinalProject.Areas.Identity.Pages.Account
 
             [Required]
             [StringLength(255, ErrorMessage = "The Username must be between 1 to 255.", MinimumLength = 1)]
+            [RegularExpression(@"^[A-Za-z][A-Za-z0-9]*$", ErrorMessage = "Username must start with a letter and contain only letters and numbers.")]
             public string UserName { get; set; }
 
             [Required]
@@ -76,7 +73,6 @@ namespace FinalProject.Areas.Identity.Pages.Account
             [DataType(DataType.Password)]
             public string Password { get; set; }
         }
-
 
         public async Task OnGetAsync(string returnUrl = null)
         {
@@ -88,8 +84,16 @@ namespace FinalProject.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
             if (ModelState.IsValid)
             {
+                // ?????????? UserName ???????????????
+                if (Input.UserName.Any(char.IsDigit))
+                {
+                    ModelState.AddModelError(string.Empty, "Username cannot contain numbers.");
+                    return Page();
+                }
+
                 var user = CreateUser();
 
                 user.FirstName = Input.FirstName;
@@ -98,6 +102,7 @@ namespace FinalProject.Areas.Identity.Pages.Account
 
                 await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.UserName, CancellationToken.None);
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
@@ -126,6 +131,7 @@ namespace FinalProject.Areas.Identity.Pages.Account
                         return LocalRedirect(returnUrl);
                     }
                 }
+
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
