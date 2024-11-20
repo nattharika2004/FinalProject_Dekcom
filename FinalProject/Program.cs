@@ -5,18 +5,18 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ????? Connection String ?????????? DbContext
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<FinalProjectContext>(options =>
     options.UseSqlServer(connectionString));
 
-// ??????? Identity ????? Role Manager
+
 builder.Services.AddDefaultIdentity<FinalProjectUser>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = false; // ??????????????????
-    options.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider; // ?????? 2FA
+    options.SignIn.RequireConfirmedAccount = false; 
+    options.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider; 
 })
-.AddRoles<IdentityRole>() // ?????????? Role Management
+.AddRoles<IdentityRole>() 
 .AddEntityFrameworkStores<FinalProjectContext>()
 .AddDefaultTokenProviders();
 
@@ -25,7 +25,7 @@ builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
-// ????? Pipeline
+
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -43,7 +43,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapRazorPages();
 
-// ????? Roles ?????????????????
+
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -53,7 +53,6 @@ using (var scope = app.Services.CreateScope())
 
 app.Run();
 
-// ??????????????????? Roles
 async Task CreateRolesAsync(RoleManager<IdentityRole> roleManager)
 {
     string[] roleNames = { "Admin", "Manager", "User" };

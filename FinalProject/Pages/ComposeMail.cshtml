@@ -24,7 +24,6 @@
         <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px; background-color: #007bff; border-color: #007bff; color: white;">Send</button>
     </form>
 
-    <!-- เพิ่มปุ่ม Manage Users เฉพาะผู้ใช้ที่มีบทบาทเป็น Admin -->
     @if (User.IsInRole("Admin"))
     {
         <div style="margin-top: 20px;">
@@ -35,26 +34,26 @@
     }
 </div>
 
-<!-- ตกแต่งสีพื้นหลังและปุ่ม -->
+
 <style>
     body {
-        background-color: #212529; /* พื้นหลังสีดำ */
-        color: white; /* ตัวอักษรสีขาว */
+        background-color: #212529;
+        color: white; 
         font-family: Arial, sans-serif;
     }
 
     label {
-        color: #f8f9fa; /* ทำให้สีตัวอักษรใน label เป็นสีอ่อน */
+        color: #f8f9fa; 
     }
 
     input, textarea {
-        background-color: #444; /* พื้นหลังของ input เป็นสีเทาเข้ม */
-        border: 1px solid #555; /* ขอบสีเทาอ่อน */
-        color: white; /* ตัวอักษรใน input เป็นสีขาว */
+        background-color: #444; 
+        border: 1px solid #555; 
+        color: white; 
     }
 
         input:focus, textarea:focus {
-            background-color: #555; /* เมื่อ focus สีพื้นหลังจะเข้มขึ้น */
-            border-color: #007bff; /* ขอบเมื่อ focus จะเป็นสีน้ำเงิน */
+            background-color: #555; 
+            border-color: #007bff; 
         }
 </style>
